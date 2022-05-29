@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <img src="#" alt="Something off giphy">
+    </div>
+
+    <!-- Get new image -->
+    <button id="newImage" onclick="getnewImage()">I want another one!</button>
+
+    <!-- Search for specific image -->
+    <div>
+        <label for="searchImage">Search for other images (and press ENTER)</label>
+        <input type="text" id="searchImage">
+    </div>
+
+    <script>
+        const img = document.querySelector('img')
+
+        function getnewImage() {
+            fetch('https://api.giphy.com/v1/gifs/translate?api_key=0xFgiBU7qQ7ofwa6d6VPl9kuyQkPkxzw&s=cats', { mode: 'cors' })
+                .then(function (response) {
+                    return response.json()
+                })
+                .then(function (response) {
+                    img.src = response.data.images.original.url
+                })
+        }
+
+        function searchSpecific() {
+            const input = document.querySelector('#searchImage')
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    fetch(`https://api.giphy.com/v1/gifs/translate?api_key=0xFgiBU7qQ7ofwa6d6VPl9kuyQkPkxzw&s=${input.value}`, { mode: 'cors' })
+                        .then(function (response) {
+                            return response.json()
+                        })
+                        .then(function (response) {
+                            img.src = response.data.images.original.url
+                        })
+                        .catch(function (error) {
+                            console.log('Image not found!')
+                        })
+                }
+            })
+        }
+        searchSpecific()
+        getnewImage()
+    </script>
+</body>
+
+</html>
